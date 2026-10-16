@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "cashly": {
+      "command": "npx",
+      "args": [
+        "-y", "mcp-remote", "https://cashly.corenexis.com/api/mcp",
+        "--header", "x-api-key:cn_cashly_your_key_here"
+      ]
+    }
+  }
+}
