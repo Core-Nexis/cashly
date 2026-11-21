@@ -52,9 +52,11 @@ Ask an assistant things like:
 - "Record this month's car loan EMI as paid."
 - "Who owes me money, and how much is left on each?"
 - "Create a credit card called Travel Card with a 2,00,000 limit."
+- "Am I within my budget this month?"
+- "I moved 5,000 from my bank account to my wallet."
 
 Every action works on the signed-in user's own data, and nothing moves real money: recording a payment
-only updates the tracker.
+or a transfer only updates the tracker.
 
 ## Quick start
 
@@ -64,7 +66,7 @@ only updates the tracker.
 - **Everything else:** create an API key in Cashly under **Settings -> Developer -> API keys**. Keys look
   like `cn_cashly_...` and can be read and write or read only. Up to 5 keys per account.
 
-API, MCP and webhook access are part of the Cashly Pro and Pro Plus plans.
+If an account does not include API and MCP access, the server says so in its reply.
 
 ### 2. Connect your client
 
@@ -170,21 +172,24 @@ curl -X POST https://cashly.corenexis.com/api/mcp \
 
 ## MCP tools
 
-71 tools. Reads are marked read-only and deletes destructive, so clients can ask before acting.
+Server version 1.6.0. ChatGPT and other assistant connections (OAuth) get 75 tools; API-key connections
+get 79, the same 75 plus 4 earlier names kept so saved workflows keep working. Reads are marked read-only
+and changes destructive, so clients can ask before acting.
 
 | Area | Tools |
 |---|---|
-| Account | `get_profile`, `health_check`, `get_rate_limit_status`, `get_usage`, `get_user`, `update_user`, `get_billing_status`, `get_billing_payments`, `list_signed_in_devices`, `list_connected_apps`, `update_notifications` |
-| Reference and stats | `get_categories`, `get_payment_methods`, `get_stats` |
+| Start here | `get_overview` (profile, currency, every account with its id, categories and payment methods in one call) |
+| Account | `get_profile`, `health_check`, `get_rate_limit_status`, `get_usage`, `get_user`, `update_user`, `list_signed_in_devices`, `list_connected_apps`, `update_notifications` |
+| Reference, stats and budget | `get_categories`, `get_payment_methods`, `get_stats`, `get_budget`, `set_budget`, `delete_budget`, `compare_months` |
 | Transactions | `list_transactions`, `get_transaction`, `create_transaction`, `update_transaction`, `delete_transaction` |
 | Debts (lend and borrow) | `list_debts`, `get_debt`, `create_debt`, `update_debt`, `delete_debt`, `record_debt_payment`, `settle_debt`, `add_to_debt`, `unsettle_debt` |
-| Accounts | `list_accounts`, and list / create / update / delete for banks, credit cards, debit cards and wallets |
+| Accounts and transfers | `list_accounts`, list / create / update / delete for banks, credit cards, debit cards and wallets, and `create_transfer` for money moved between the user's own accounts |
 | EMIs and loans | `list_emis`, `get_emi`, `get_emi_payments`, `create_emi`, `update_emi`, `delete_emi`, `record_emi_payment` |
 | Subscriptions | `list_subscriptions`, `get_subscription`, `get_subscription_payments`, `create_subscription`, `update_subscription`, `delete_subscription`, `record_subscription_payment` |
 | Upcoming bills | `get_upcoming_bills`, `record_bill_payment`, `skip_upcoming_bill` |
 | Webhooks | `list_webhook_events`, `list_webhooks`, `get_webhook`, `create_webhook`, `update_webhook`, `rotate_webhook_secret`, `delete_webhook`, `send_webhook_test`, `list_webhook_deliveries` |
 
-Full list with arguments: [`docs/mcp.md`](docs/mcp.md).
+Full list, earlier tool names and removed tools: [`docs/mcp.md`](docs/mcp.md).
 
 ## REST API
 
@@ -216,7 +221,7 @@ Details, rate limits and error codes: [`docs/rest-api.md`](docs/rest-api.md). We
 - Android: https://play.google.com/store/apps/details?id=com.corenexis.cashly
 - MCP guide: https://cashly.corenexis.com/developer/mcp
 - API docs: https://cashly.corenexis.com/developer/api
-- Support: https://helpdesk.corenexis.com or support@corenexis.com
+- Support: https://helpdesk.corenexis.com
 
 ---
 
