@@ -6,7 +6,7 @@
 
 <p align="center">
   Expense, EMI and debt tracker with a REST API and a remote MCP server.<br>
-  Let ChatGPT, Claude, n8n or your own AI agent read and log your money, in any currency.
+  Let ChatGPT, Gemini, n8n or any other MCP client or AI agent read and log your money, in any currency.
 </p>
 
 <p align="center">
@@ -28,7 +28,9 @@
 [Cashly](https://cashly.corenexis.com) is a free personal finance app for Android and the web, used
 worldwide in any currency and time zone. It tracks expenses and income, real balances for banks, cards
 and wallets, EMIs and loans, money lent and borrowed, and bills before they are due. It never asks for a
-bank login, never reads SMS and has no ads.
+bank login and has no ads. On Android, an optional Auto tracker (beta, paid plans) can log bank, card and
+wallet transaction SMS for you: it stays off until you turn it on and allow the SMS permission, messages
+are read on the phone and their text never leaves it, and you can turn it off any time.
 
 This repository is the public home of Cashly's **developer surface**:
 
@@ -83,19 +85,29 @@ If an account does not include API and MCP access, the server says so in its rep
 </details>
 
 <details>
-<summary><b>Claude Code</b></summary>
+<summary><b>Command-line MCP clients</b></summary>
+
+Most command-line clients add a remote server with one command. The exact syntax depends on the client;
+the values are always the same:
+
+- Transport: `http` (Streamable HTTP)
+- URL: `https://cashly.corenexis.com/api/mcp`
+- Header: `x-api-key: cn_cashly_your_key_here`
+
+For example:
 
 ```bash
-claude mcp add --transport http cashly https://cashly.corenexis.com/api/mcp \
+<your-client> mcp add --transport http cashly https://cashly.corenexis.com/api/mcp \
   --header "x-api-key: cn_cashly_your_key_here"
 ```
 
 </details>
 
 <details>
-<summary><b>Claude Desktop</b></summary>
+<summary><b>Desktop MCP clients that use a JSON config</b></summary>
 
-Add this to `claude_desktop_config.json` (see [`examples/claude_desktop_config.json`](examples/claude_desktop_config.json)):
+Clients that only start local (stdio) servers can reach Cashly through the `mcp-remote` bridge. Add this to
+the client's MCP config file (see [`examples/mcp_client_config.json`](examples/mcp_client_config.json)):
 
 ```json
 {
@@ -212,7 +224,10 @@ Details, rate limits and error codes: [`docs/rest-api.md`](docs/rest-api.md). We
 - OAuth 2.1 with PKCE and Dynamic Client Registration; access tokens last one hour.
 - API keys can be read only; every request is scoped to the key owner's data.
 - Keys and connected apps can be revoked any time in **Settings -> Developer**.
-- No bank login, no SMS access, no card numbers. Data is never sold or shared with advertisers.
+- No bank login and no card numbers. Data is never sold or shared with advertisers.
+- The optional Android Auto tracker (beta, paid plans) reads incoming bank, card and wallet transaction SMS
+  on the phone only after you turn it on and allow the permission. Only the entry details (amount, type, date,
+  merchant, bank or card name, last 4 digits) are sent, never the message text. Turn it off any time.
 
 ## Links
 
